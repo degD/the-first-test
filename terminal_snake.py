@@ -2,7 +2,7 @@
 """
 Created on Sun Jun 26 09:33:21 2022
 
-@author: deneg
+@author: degD
 
 This file consists of classes and functions for the game
 """

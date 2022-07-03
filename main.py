@@ -9,11 +9,6 @@ import terminal_snake as ts
 
 term = blessed.Terminal()
 
-ct1 = {'head_u': '^', 'head_d': 'v',
-       'head_l': '<', 'head_r': '>',
-       'tail_u': '|', 'tail_d': '|',
-       'tail_l': '-', 'tail_r': '-',
-       'empty': '*', 'fruit': 'p'}
 
 body2 = term.on_yellow4 + '  ' + term.normal
 bg2 = term.on_snow3 + '  ' + term.normal
@@ -23,12 +18,6 @@ ct2 = {'head_u': body2, 'head_d': body2,
        'tail_u': body2, 'tail_d': body2,
        'tail_l': body2, 'tail_r': body2,
        'empty': bg2, 'fruit': f2}
-
-ct3 = {'head_u': ' o ', 'head_d': ' o ',
-       'head_l': ' o ', 'head_r': ' o ',
-       'tail_u': ' x ', 'tail_d': ' x ',
-       'tail_l': ' x ', 'tail_r': ' x ',
-       'empty': ' * ', 'fruit': 'p'}
 
 
 with term.fullscreen(), term.hidden_cursor():
