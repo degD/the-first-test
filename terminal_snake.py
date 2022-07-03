@@ -14,11 +14,14 @@ import random
 class Grid:
     """
     Class for the game area.
-    Assumes LengthxHeight is size of the area.
-    char_dict is a dict that stores the symbols for the game.
     """
 
     def __init__(self, length, height, char_dict):
+        """
+        Class for the game area.
+        Assumes LengthxHeight is size of the area.
+        char_dict is a dict that stores the symbols for the game.
+        """
         # Because length and height give the size, they should start from 1, instead of 0.
         if length < 3 or height < 3:  # Or there wouldn't be enough space for the snake
             raise ValueError('All arguments should be greater or equal to 3.')
@@ -186,7 +189,9 @@ class GameObject:
     def update_space(self):
         i = self.obj_index
         GameObject.occupied_coordinates[i] = self.coords_list
-
+    
+    # Checks if any coordinate from the given coords_list already exists in the
+    # occupied_coordinates dictionary.
     @classmethod
     def is_intersect(cls, new_coords_list):
         for new_coord in new_coords_list:
@@ -197,9 +202,15 @@ class GameObject:
     
 
 class Snake(GameObject):
-    """Snake, the main protagonist of the game."""
+    """
+    Snake, the main protagonist of the game.
+    """
     def __init__(self, *sections_coords):
-
+        """
+        Snake, the main protagonist of the game.
+        Assumes Snake object is instanced with at least 2 coordinate tuples.
+        Raises a ValueError instead.
+        """
         # It should be at least 2 sections long to be created.
         if len(sections_coords) < 2:
             raise ValueError
