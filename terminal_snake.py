@@ -264,6 +264,15 @@ class Snake(GameObject):
         
         self.snake_body.append(snake_section)
 
+    def set_coords_list(self):
+        """
+        Resets coords_list from snake_body
+        """
+        self.coords_list = []
+
+        for sect in self.snake_body:
+            self.coords_list.append(sect[0])
+            
     def move_snake(self, new_dir):
         """
         Assumes new_dir is one of r,l,u,d.
@@ -283,15 +292,8 @@ class Snake(GameObject):
             elif new_dir == 'r':
                 x += 1
             
-            return (x, y), new_dir
-
-        # Re-set coords_list from updated snake_body 
-        def set_coords_list():
-            self.coords_list = []
-
-            for sect in self.snake_body:
-                self.coords_list.append(sect[0])
-               
+            return (x, y), new_dir        
+        
         # Update coordinates of sections
         for i in range(self.snake_len):
             sect = self.snake_body[i]
@@ -303,7 +305,7 @@ class Snake(GameObject):
             new_dir = old_dir
         
         # Change occupied_coordinates
-        set_coords_list()
+        self.set_coords_list()
         self.update_space()
 
     def grow_snake(self):
