@@ -221,9 +221,14 @@ class Snake(GameObject):
         
         self.snake_len = len(sections_coords)
 
-        # snake_body is a list that contains information about sections.
+        # snake_body is a list that contains information about its sections.
+        # Example: [((1, 1), 'l')((1, 2), 'l')]
+        # r, l, u, d are directions. 
+        # Keep in mind that the x-axis increases to right and
+        # y-axis increases to down.
         self.snake_body = []
         
+        # Setting directions and sections for coordinates
         for i in range(self.snake_len-1):
             current_section = sections_coords[i]
             next_section = sections_coords[i+1]
@@ -259,14 +264,12 @@ class Snake(GameObject):
         
         self.snake_body.append(snake_section)
 
-    def set_coords_list(self):
-        self.coords_list = []
-        
-        for sect in self.snake_body:
-            self.coords_list.append(sect[0])
-
     def move_snake(self, new_dir):
-        
+        """
+        Assumes new_dir is one of r,l,u,d.
+        Updates snake_body and coords_list according to direction.
+        """
+        # Change coords according to new_dir
         def update_coords(sect, new_dir):
             coords = sect[0]
             x, y = coords[0], coords[1]
@@ -281,7 +284,15 @@ class Snake(GameObject):
                 x += 1
             
             return (x, y), new_dir
-        
+
+        # Re-set coords_list from updated snake_body 
+        def set_coords_list(self):
+            self.coords_list = []
+
+            for sect in self.snake_body:
+                self.coords_list.append(sect[0])
+               
+        # Update coordinates of sections
         for i in range(self.snake_len):
             sect = self.snake_body[i]
             old_dir = sect[1]
@@ -291,7 +302,8 @@ class Snake(GameObject):
             
             new_dir = old_dir
         
-        self.set_coords_list()
+        # Change occupied_coordinates
+        set_coords_list()
         self.update_space()
 
     def grow_snake(self):
