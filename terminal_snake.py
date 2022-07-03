@@ -286,7 +286,7 @@ class Snake(GameObject):
             return (x, y), new_dir
 
         # Re-set coords_list from updated snake_body 
-        def set_coords_list(self):
+        def set_coords_list():
             self.coords_list = []
 
             for sect in self.snake_body:
