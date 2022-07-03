@@ -195,7 +195,7 @@ class GameObject:
     @classmethod
     def is_intersect(cls, new_coords_list):
         for new_coord in new_coords_list:
-            for occu_list in GameObject.occupied_coordinates:
+            for occu_list in GameObject.occupied_coordinates.values():
                 if new_coord in occu_list:
                     return True
         return False
