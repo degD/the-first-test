@@ -1,7 +1,7 @@
 # the-first-test
 
 This is a snake game and also my first github project.
-That's probably all I can say.
+That's probably all.
 
 ## Pre-requests
 At least [Python3.5](https://www.python.org/),
