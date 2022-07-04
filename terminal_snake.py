@@ -15,7 +15,6 @@ class Grid:
     """
     Class for the game area.
     """
-
     def __init__(self, length, height, char_dict):
         """
         Class for the game area.
@@ -44,6 +43,7 @@ class Grid:
         # First, a swallow (and deep) copy of empty_grid_list is created.
         # Then game objects, such as snake and fruit, will be placed on it.
 
+
     def spawn_new_snake(self):
         """
         Returns a new snake object. Its section coordinates are chosen
@@ -65,6 +65,7 @@ class Grid:
         # Creating a snake object.
         return Snake((head_x, head_y), (tail_x, tail_y))
 
+
     def spawn_fruit(self):
         """
         Returns a fruit object. Its coordinates are chosen randomly
@@ -74,6 +75,7 @@ class Grid:
         fruit_y = random.randint(1, self.grid_area[1]-2)
         
         return Fruit((fruit_x, fruit_y))
+
 
     def create_empty_grid_list(self):
         """
@@ -88,6 +90,7 @@ class Grid:
         row = [symbol_empty for _ in range(length)]
         self.empty_grid_list = [list(row) for _ in range(height)]  # list(row) to prevent list mutation.
 
+
     def copy_empty_grid(self):
         """
         Refreshes grid_list to empty_grid_list.
@@ -97,6 +100,7 @@ class Grid:
             self.grid_list.append(row[:])
         # Doing this instead of just using list.copy.
         # That's because inner lists are not getting copied otherwise.
+
 
     def add_snake_to_grid_list(self, snake):
         """
@@ -124,6 +128,7 @@ class Grid:
             sect_symbol = self.char_dict['tail_'+sect_dir]
             add_to_grid(sect_x, sect_y, sect_symbol)
 
+
     def add_fruit_to_grid(self, fruit):
         """
         Assumes fruit is a Fruit object.
@@ -138,6 +143,7 @@ class Grid:
         
         self.grid_list[y][x] = symbol
 
+
     def print_grid_list(self):
         """
         Print the grid_list as a string.
@@ -150,6 +156,7 @@ class Grid:
             res += '\n'
 
         print(res, end='')
+
 
     def run_grid(self, snakes_iter, fruits_iter):
         """
@@ -168,27 +175,35 @@ class Grid:
         
         for fruit in fruits_iter:
             self.add_fruit_to_grid(fruit)
-        
+
+       
 
 class GameObject:
-    """Class for game objects."""
+    """
+    Class for game objects. Parent of Snake and Fruit. occupied_coordinates dictionary 
+    is its most important part. This dictionary stores coordinates of in-game objects.
+    """
     occupied_coordinates = {}
     # This dict stores all the coordinates of game objects.
     
     def __init__(self):
         self.obj_index = len(GameObject.occupied_coordinates)
 
+
     def occupy_space(self):
         i = self.obj_index
         GameObject.occupied_coordinates[i] = self.coords_list
+
 
     def empty_space(self):
         i = self.obj_index
         GameObject.occupied_coordinates.pop(i)
 
+
     def update_space(self):
         i = self.obj_index
         GameObject.occupied_coordinates[i] = self.coords_list
+    
     
     # Checks if any coordinate from the given coords_list already exists in the
     # occupied_coordinates dictionary.
@@ -200,6 +215,19 @@ class GameObject:
                     return True
         return False
     
+    
+    @classmethod
+    def occupied_number(cls):
+        """
+        Returns the number of occupied coordinates.
+        """
+        num = 0
+        for occu_list in GameObject.occupied_coordinates.values():
+            num += len(occu_list)
+        
+        return num
+    
+
 
 class Snake(GameObject):
     """
@@ -264,6 +292,7 @@ class Snake(GameObject):
         
         self.snake_body.append(snake_section)
 
+
     def set_coords_list(self):
         """
         Resets coords_list from snake_body
@@ -272,7 +301,8 @@ class Snake(GameObject):
 
         for sect in self.snake_body:
             self.coords_list.append(sect[0])
-            
+
+           
     def move_snake(self, new_dir):
         """
         Assumes new_dir is one of r,l,u,d.
@@ -308,10 +338,16 @@ class Snake(GameObject):
         self.set_coords_list()
         self.update_space()
 
+
     def grow_snake(self):
+        """
+        Append a new section to snake_body.
+        """
         sect = self.snake_body[-1]
         x, y = sect[0][0], sect[0][1]
         
+        # Its direction is direction of the last section.
+        # And its coordinates are moved to opposite of that direction.
         if sect[1] == 'u':
             y += 1
         elif sect[1] == 'd':
@@ -328,14 +364,12 @@ class Snake(GameObject):
         self.set_coords_list()
         self.update_space()
 
+
     def eat_fruit(self, fruit):
         """
-        Checks if head of the snake and fruit appear on the same coordinates.
-
-        :param fruit: Assumes fruit is a Fruit object
-        :return:
-        Returns True if head of the snake and fruit appear on the same coordinates.
-        Also removes fruit from the occupied_coordinates list. Returns False otherwise.
+        Assumes fruit is a Fruit object.
+        Checks if head of the snake and fruit appear on the same coordinates or not.
+        Returns True if they, and removes fruit from occupied_coordinates. False otherwise.
         """
         head_coords = self.coords_list[0]
         fruit_coords = fruit.coords_list[0]
@@ -346,10 +380,12 @@ class Snake(GameObject):
         else:
             return False
 
+
     def is_head_tail_crash(self):
         """
-
-        :return:
+        Checks if head and any other section (tail section) of the snake
+        intersect or not. So have same coordinates or not. Returns 
+        True if they, False otherwise. 
         """
         head_coords = self.coords_list[0]
 
@@ -358,10 +394,17 @@ class Snake(GameObject):
                 return True
         return False
 
+
     def out_of_grid(self, grid):
+        """
+        Assumes grid is a Grid object.
+        Returns True if snake's coordinates are in the specified grid.
+        False otherwise.
+        """
         head_coords = self.coords_list[0]
         head_x, head_y = head_coords[0], head_coords[1]
-
+        # Checking only the head is enough because each part is following it.
+        
         grid_length = grid.grid_area[0]
         grid_height = grid.grid_area[1]
 
@@ -371,7 +414,20 @@ class Snake(GameObject):
             return True
 
 
+
 class Fruit(GameObject):
+    """
+    Delicious fruit object.
+    """
     def __init__(self, coords):
+        """
+        Coordinates of the fruit.
+        """
         self.coords_list = [coords]
         GameObject.__init__(self)
+
+
+
+# This project is finished. But if I ever had to build such a snake game again,
+# I'll just store the coordinates of the head, and its past coordinates.
+# Tail sections are just following the head, after all.
