@@ -12,7 +12,7 @@ Keep in mind that playsound **should be 1.2.2 instead of 1.3**. 1.3 version has 
 
 Modules can be installed using pip:
 ```
-pip3 install blessed playsound=1.2.2
+pip3 install blessed playsound-1.2.2
 ```
 
 ### How to run?
